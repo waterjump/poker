@@ -45,6 +45,18 @@ class Hand
   def evaluate
     puts "Your cards: ", "#{@cards.map { |card| card.name }.join(', ')}"
 
+    # TODO: refactor these evaluations into a ranked result so they can be
+    #   compared in the future
+    if check_for_royal_flush
+      puts 'You have a royal flush'
+      return
+    end
+
+    if check_for_straight_flush
+      puts 'You have a straight flush'
+      return
+    end
+
     if check_for_four_of_a_kind
       puts "You have four #{check_for_four_of_a_kind}s!"
       return
@@ -79,6 +91,17 @@ class Hand
       puts "You have a pair of #{check_for_pair}s!"
       return
     end
+  end
+
+  def check_for_royal_flush
+    check_for_flush &&
+      check_for_straight &&
+      cards.sort.reverse.first.rank == 14 &&
+      cards.sort.reverse.last.rank == 10
+  end
+
+  def check_for_straight_flush
+    check_for_flush && check_for_straight
   end
 
   def check_for_three_of_a_kind

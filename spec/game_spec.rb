@@ -27,6 +27,63 @@ RSpec.describe Hand do
     )
   end
 
+  describe 'a royal flush' do
+    it 'notifies a royal flush result' do
+      royal_flush =
+        Hand.new(game,
+          [
+            Card.new(11, :spades, 'J'),
+            Card.new(14, :spades, 'A'),
+            Card.new(10, :spades, '10'),
+            Card.new(12, :spades, 'Q'),
+            Card.new(13, :spades, 'K')
+          ]
+        )
+
+      expect { royal_flush.evaluate }.to(
+        output(/You have a royal flush.*/).to_stdout
+      )
+    end
+
+    context 'when not a royal flush' do
+      it 'does not notify of a royal flush' do
+        five_high_flush =
+          Hand.new(game,
+            [
+              Card.new(4, :spades, '4'),
+              Card.new(5, :spades, '5'),
+              Card.new(14, :spades, 'A'),
+              Card.new(2, :spades, '2'),
+              Card.new(3, :spades, '3')
+            ]
+          )
+
+        expect { five_high_flush.evaluate }.not_to(
+          output(/You have a royal flush.*/).to_stdout
+        )
+      end
+    end
+  end
+
+  describe 'a straight flush' do
+    it 'notifies a straight flush result' do
+      straight =
+        Hand.new(game,
+          [
+            Card.new(11, :spades, 'J'),
+            Card.new(8, :spades, '8'),
+            Card.new(10, :spades, '10'),
+            Card.new(7, :spades, '7'),
+            Card.new(9, :spades, '9')
+          ]
+        )
+
+      expect { straight.evaluate }.to(
+        output(/You have a straight flush.*/).to_stdout
+      )
+    end
+  end
+
   describe 'a pair' do
     context 'when hand has a pair' do
       it 'notifies a pair has been evaluated' do
