@@ -91,6 +91,8 @@ class Hand
       puts "You have a pair of #{check_for_pair}s!"
       return
     end
+
+    puts 'You have a high card'
   end
 
   def check_for_royal_flush

@@ -324,4 +324,12 @@ RSpec.describe Hand do
       end
     end
   end
+
+  describe 'high card' do
+    it 'notifies a high card result' do
+      expect { high_card_hand.evaluate }.to(
+        output(/You have a high card.*/).to_stdout
+      )
+    end
+  end
 end
