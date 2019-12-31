@@ -84,93 +84,6 @@ RSpec.describe Hand do
     end
   end
 
-  describe 'a pair' do
-    context 'when hand has a pair' do
-      it 'notifies a pair has been evaluated' do
-        pair =
-          Hand.new(game,
-            [
-              Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
-              Card.new(4, :hearts, '4'),
-              Card.new(11, :clubs, 'J'),
-              Card.new(7, :diamonds, '7')
-            ]
-          )
-
-        expect { pair.evaluate }.to(
-          output(/You have a pair of 2s!.*/).to_stdout
-        )
-      end
-    end
-
-    context 'when hand has no pair' do
-      it 'does not notiify pair has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
-          output(/You have a pair of 2s!.*/).to_stdout
-        )
-      end
-    end
-  end
-
-  describe 'two pair' do
-    context 'when hand has two pair' do
-      it 'notifies two pair has been evaluated' do
-        two_pair =
-          Hand.new(game,
-            [
-              Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
-              Card.new(4, :hearts, '4'),
-              Card.new(4, :clubs, '4'),
-              Card.new(7, :diamonds, '7')
-            ]
-          )
-
-        expect { two_pair.evaluate }.to(
-          output(/You have two pair!.*/).to_stdout
-        )
-      end
-    end
-
-    context 'when hand does not have two pair' do
-      it 'does not notiify two pair has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
-          output(/You have a pair of 2s!.*/).to_stdout
-        )
-      end
-    end
-  end
-
-  describe 'three of a kind' do
-    context 'when hand has three of a kind' do
-      it 'notifies a three of a kind result' do
-        three_of_a_kind =
-          Hand.new(game,
-            [
-              Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
-              Card.new(4, :hearts, '4'),
-              Card.new(2, :clubs, '2'),
-              Card.new(7, :diamonds, '7')
-            ]
-          )
-
-        expect { three_of_a_kind.evaluate }.to(
-          output(/You have three 2s!.*/).to_stdout
-        )
-      end
-    end
-
-    context 'when hand has no three of a kind' do
-      it 'does not notify three of a kind has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
-          output(/You have three of a kind.*/).to_stdout
-        )
-      end
-    end
-  end
-
   describe 'four of a kind' do
     context 'when hand has four of a kind' do
       it 'notifies a four of a kind result' do
@@ -320,6 +233,93 @@ RSpec.describe Hand do
       it 'does not notify a straight result' do
         expect { high_card_hand.evaluate }.not_to(
           output(/You have a straight.*/).to_stdout
+        )
+      end
+    end
+  end
+
+  describe 'three of a kind' do
+    context 'when hand has three of a kind' do
+      it 'notifies a three of a kind result' do
+        three_of_a_kind =
+          Hand.new(game,
+            [
+              Card.new(2, :spades, '2'),
+              Card.new(2, :hearts, '2'),
+              Card.new(4, :hearts, '4'),
+              Card.new(2, :clubs, '2'),
+              Card.new(7, :diamonds, '7')
+            ]
+          )
+
+        expect { three_of_a_kind.evaluate }.to(
+          output(/You have three 2s!.*/).to_stdout
+        )
+      end
+    end
+
+    context 'when hand has no three of a kind' do
+      it 'does not notify three of a kind has been evaluated' do
+        expect { high_card_hand.evaluate }.not_to(
+          output(/You have three of a kind.*/).to_stdout
+        )
+      end
+    end
+  end
+
+  describe 'two pair' do
+    context 'when hand has two pair' do
+      it 'notifies two pair has been evaluated' do
+        two_pair =
+          Hand.new(game,
+            [
+              Card.new(2, :spades, '2'),
+              Card.new(2, :hearts, '2'),
+              Card.new(4, :hearts, '4'),
+              Card.new(4, :clubs, '4'),
+              Card.new(7, :diamonds, '7')
+            ]
+          )
+
+        expect { two_pair.evaluate }.to(
+          output(/You have two pair!.*/).to_stdout
+        )
+      end
+    end
+
+    context 'when hand does not have two pair' do
+      it 'does not notiify two pair has been evaluated' do
+        expect { high_card_hand.evaluate }.not_to(
+          output(/You have a pair of 2s!.*/).to_stdout
+        )
+      end
+    end
+  end
+
+  describe 'a pair' do
+    context 'when hand has a pair' do
+      it 'notifies a pair has been evaluated' do
+        pair =
+          Hand.new(game,
+            [
+              Card.new(2, :spades, '2'),
+              Card.new(2, :hearts, '2'),
+              Card.new(4, :hearts, '4'),
+              Card.new(11, :clubs, 'J'),
+              Card.new(7, :diamonds, '7')
+            ]
+          )
+
+        expect { pair.evaluate }.to(
+          output(/You have a pair of 2s!.*/).to_stdout
+        )
+      end
+    end
+
+    context 'when hand has no pair' do
+      it 'does not notiify pair has been evaluated' do
+        expect { high_card_hand.evaluate }.not_to(
+          output(/You have a pair of 2s!.*/).to_stdout
         )
       end
     end
