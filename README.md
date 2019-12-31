@@ -4,7 +4,7 @@ This app deals five cards psuedorandomly and evaluates if there's a valid poker 
 
 ## Install
 (You need ruby and bundler)
-1. Clone the repo: `git clone <repo address here>`
+1. Clone the repo: `git clone git@github.com:waterjump/poker.git`
 2. Install depedencies: `bundle install`
 
 ## Running the program
