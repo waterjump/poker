@@ -7,8 +7,12 @@ RSpec.describe Game do
     expect(game.deck.cards.size).to eq(52)
   end
 
-  it 'deals five cards' do
-    expect(game.deal.cards.size).to eq(5)
+  it 'deals two cards to pocket' do
+    expect(game.deal.pocket.size).to eq(2)
+  end
+
+  it 'deals five cards to community' do
+    expect(game.deal.community.size).to eq(5)
   end
 end
 
@@ -17,7 +21,7 @@ RSpec.describe Deck do
 
   describe 'dealing cards' do
     it 'removes cards from deck' do
-      expect { game.deal }.to change { game.deck.cards.size }.by(-5)
+      expect { game.deal }.to change { game.deck.cards.size }.by(-7)
     end
   end
 
@@ -41,10 +45,14 @@ RSpec.describe Hand do
     Hand.new(game,
       [
         Card.new(2, :spades, '2'),
-        Card.new(8, :hearts, '8'),
+        Card.new(8, :hearts, '8')
+      ],
+      [
         Card.new(4, :hearts, '4'),
         Card.new(11, :clubs, 'J'),
-        Card.new(7, :diamonds, '7')
+        Card.new(7, :diamonds, '7'),
+        Card.new(12, :diamonds, 'Q'),
+        Card.new(5, :clubs, '5')
       ]
     )
   end
@@ -55,10 +63,14 @@ RSpec.describe Hand do
         Hand.new(game,
           [
             Card.new(11, :spades, 'J'),
-            Card.new(14, :spades, 'A'),
+            Card.new(14, :spades, 'A')
+          ],
+          [
             Card.new(10, :spades, '10'),
             Card.new(12, :spades, 'Q'),
-            Card.new(13, :spades, 'K')
+            Card.new(13, :spades, 'K'),
+            Card.new(12, :diamonds, 'Q'),
+            Card.new(5, :clubs, '5')
           ]
         )
 
@@ -67,16 +79,43 @@ RSpec.describe Hand do
       )
     end
 
+    context 'when a royal straight but not a flush' do
+      it 'does not notify a royal flush result' do
+        not_royal_flush =
+          Hand.new(game,
+            [
+              Card.new(11, :spades, 'J'),
+              Card.new(14, :spades, 'A')
+            ],
+            [
+              Card.new(10, :spades, '10'),
+              Card.new(12, :diamonds, 'Q'),
+              Card.new(13, :spades, 'K'),
+              Card.new(12, :diamonds, 'Q'),
+              Card.new(5, :spades, '5')
+            ]
+          )
+
+        expect { not_royal_flush.evaluate }.not_to(
+          output(/You have a royal flush.*/).to_stdout
+        )
+      end
+    end
+
     context 'when not a royal flush' do
       it 'does not notify of a royal flush' do
         five_high_flush =
           Hand.new(game,
             [
               Card.new(4, :spades, '4'),
-              Card.new(5, :spades, '5'),
+              Card.new(5, :spades, '5')
+            ],
+            [
               Card.new(14, :spades, 'A'),
               Card.new(2, :spades, '2'),
-              Card.new(3, :spades, '3')
+              Card.new(3, :spades, '3'),
+              Card.new(7, :clubs, '7'),
+              Card.new(10, :hearts, '10')
             ]
           )
 
@@ -93,10 +132,14 @@ RSpec.describe Hand do
         Hand.new(game,
           [
             Card.new(11, :spades, 'J'),
-            Card.new(8, :spades, '8'),
+            Card.new(8, :spades, '8')
+          ],
+          [
             Card.new(10, :spades, '10'),
             Card.new(7, :spades, '7'),
-            Card.new(9, :spades, '9')
+            Card.new(9, :spades, '9'),
+            Card.new(13, :clubs, 'K'),
+            Card.new(2, :diamonds, '2')
           ]
         )
 
@@ -113,10 +156,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
+              Card.new(2, :hearts, '2')
+            ],
+            [
               Card.new(2, :diamonds, '2'),
               Card.new(2, :clubs, '2'),
-              Card.new(7, :diamonds, '7')
+              Card.new(7, :diamonds, '7'),
+              Card.new(9, :spades, '9'),
+              Card.new(11, :hearts, 'J')
             ]
           )
 
@@ -142,10 +189,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
+              Card.new(2, :hearts, '2')
+            ],
+            [
               Card.new(3, :diamonds, '3'),
               Card.new(3, :clubs, '3'),
-              Card.new(3, :hearts, '3')
+              Card.new(3, :hearts, '3'),
+              Card.new(11, :hearts, 'J'),
+              Card.new(6, :clubs, '6')
             ]
           )
 
@@ -171,10 +222,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(13, :spades, 'K'),
+              Card.new(13, :spades, 'K')
+            ],
+            [
               Card.new(1, :spades, 'A'),
               Card.new(12, :spades, 'Q'),
-              Card.new(7, :spades, '7')
+              Card.new(7, :spades, '7'),
+              Card.new(6, :clubs, '6'),
+              Card.new(5, :hearts, '5')
             ]
           )
 
@@ -200,10 +255,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(11, :spades, 'J'),
-              Card.new(8, :hearts, '8'),
+              Card.new(8, :hearts, '8')
+            ],
+            [
               Card.new(9, :clubs, '9'),
               Card.new(10, :diamonds, '10'),
-              Card.new(7, :spades, '7')
+              Card.new(7, :spades, '7'),
+              Card.new(14, :spades, 'A'),
+              Card.new(13, :clubs, 'K')
             ]
           )
 
@@ -219,10 +278,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(11, :spades, 'J'),
-              Card.new(14, :hearts, 'A'),
+              Card.new(14, :hearts, 'A')
+            ],
+            [
               Card.new(10, :clubs, '10'),
               Card.new(12, :diamonds, 'Q'),
-              Card.new(13, :spades, 'K')
+              Card.new(13, :spades, 'K'),
+              Card.new(2, :diamonds, '2'),
+              Card.new(4, :spades, '4')
             ]
           )
 
@@ -238,10 +301,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(14, :hearts, 'A'),
+              Card.new(14, :hearts, 'A')
+            ],
+            [
               Card.new(3, :clubs, '3'),
               Card.new(5, :diamonds, '5'),
-              Card.new(4, :spades, '4')
+              Card.new(4, :spades, '4'),
+              Card.new(9, :spades, '9'),
+              Card.new(12, :spades, 'Q')
             ]
           )
 
@@ -267,10 +334,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
+              Card.new(2, :hearts, '2')
+            ],
+            [
               Card.new(4, :hearts, '4'),
               Card.new(2, :clubs, '2'),
-              Card.new(7, :diamonds, '7')
+              Card.new(7, :diamonds, '7'),
+              Card.new(6, :diamonds, '6'),
+              Card.new(12, :clubs, 'Q')
             ]
           )
 
@@ -296,10 +367,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
+              Card.new(2, :hearts, '2')
+            ],
+            [
               Card.new(4, :hearts, '4'),
               Card.new(4, :clubs, '4'),
-              Card.new(7, :diamonds, '7')
+              Card.new(7, :diamonds, '7'),
+              Card.new(9, :diamonds, '9'),
+              Card.new(11, :clubs, 'J')
             ]
           )
 
@@ -325,10 +400,14 @@ RSpec.describe Hand do
           Hand.new(game,
             [
               Card.new(2, :spades, '2'),
-              Card.new(2, :hearts, '2'),
+              Card.new(2, :hearts, '2')
+            ],
+            [
               Card.new(4, :hearts, '4'),
               Card.new(11, :clubs, 'J'),
-              Card.new(7, :diamonds, '7')
+              Card.new(7, :diamonds, '7'),
+              Card.new(9, :diamonds, '9'),
+              Card.new(10, :diamonds, '10')
             ]
           )
 
