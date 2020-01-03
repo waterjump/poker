@@ -12,6 +12,28 @@ RSpec.describe Game do
   end
 end
 
+RSpec.describe Deck do
+  let(:game) { Game.new }
+
+  describe 'dealing cards' do
+    it 'removes cards from deck' do
+      expect { game.deal }.to change { game.deck.cards.size }.by(-5)
+    end
+  end
+
+  describe '#remove_cards' do
+    it 'removes specific cards from the deck' do
+      card_to_remove = game.deck.cards.sample
+
+      expect(game.deck.cards).to include(card_to_remove)
+
+      game.deck.remove_cards([card_to_remove])
+
+      expect(game.deck.cards).not_to include(card_to_remove)
+    end
+  end
+end
+
 RSpec.describe Hand do
   let(:game) { Game.new }
 

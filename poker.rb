@@ -27,6 +27,7 @@ class Hand
 
   def initialize(game, cards = nil)
     @cards = cards || game.deck.cards.sample(5)
+    game.deck.remove_cards(@cards)
   end
 
   def hash
@@ -189,6 +190,10 @@ class Deck
         @cards << Card.new(rank, suit, character)
       end
     end
+  end
+
+  def remove_cards(cards_to_remove)
+    @cards = @cards - cards_to_remove
   end
 end
 
