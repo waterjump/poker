@@ -23,11 +23,16 @@ class Card
 end
 
 class Hand
-  attr_accessor :cards
+  attr_accessor :cards, :pocket, :community
 
-  def initialize(game, cards = nil)
-    @cards = cards || game.deck.cards.sample(5)
-    game.deck.remove_cards(@cards)
+  def initialize(game, cards = nil, community_cards = nil)
+    @pocket = cards || game.deck.cards.sample(2)
+    game.deck.remove_cards(@pocket)
+
+    @community = community_cards || game.deck.cards.sample(5)
+    game.deck.remove_cards(@community)
+
+    @cards = @pocket + @community
   end
 
   def hash
@@ -43,8 +48,22 @@ class Hand
       end
   end
 
+  def suit_hash
+    @suit_hash ||=
+      begin
+        @cards.each_with_object({}) do |card, memo|
+          if memo[card.suit].present?
+            memo[card.suit] = memo[card.suit] + 1
+          else
+            memo[card.suit] = 1
+          end
+        end
+      end
+  end
+
   def evaluate
-    puts "Your cards: ", "#{@cards.map { |card| card.name }.join(', ')}"
+    puts "Community cards: ", "#{@community.map { |card| card.name }.join(', ')}"
+    puts "Your cards: ", "#{@pocket.map { |card| card.name }.join(', ')}"
 
     # TODO: refactor these evaluations into a ranked result so they can be
     #   compared in the future
@@ -97,14 +116,17 @@ class Hand
   end
 
   def check_for_royal_flush
-    check_for_flush &&
-      check_for_straight &&
-      cards.sort.reverse.first.rank == 14 &&
-      cards.sort.reverse.last.rank == 10
+    flush = check_for_flush
+
+    flush.present? &&
+      check_for_straight(flush) &&
+      flush.sort.reverse.first.rank == 14 &&
+      flush.sort.reverse.last.rank == 10
   end
 
   def check_for_straight_flush
-    check_for_flush && check_for_straight
+    flush = check_for_flush
+    flush.present? && check_for_straight(flush)
   end
 
   def check_for_three_of_a_kind
@@ -137,13 +159,13 @@ class Hand
   end
 
   def check_for_flush
-    suits = cards.map(&:suit).uniq
-    return true if suits.size == 1
-    false
+    flushed_suit = suit_hash.detect { |suit, count| count == 5 }&.first
+    return false unless flushed_suit.present?
+    cards.select { |card| card.suit == flushed_suit }
   end
 
-  def check_for_straight
-    sorted_cards = cards.sort.reverse
+  def check_for_straight(cards_to_check = cards)
+    sorted_cards = cards_to_check.sort.reverse
     ace_low_straight = false
 
     if sorted_cards.first.rank == 14
@@ -157,10 +179,12 @@ class Hand
   end
 
   def check_straight_ranks(cards)
-    cards[1].rank == cards[0].rank - 1 &&
-    cards[2].rank == cards[1].rank - 1 &&
-    cards[3].rank == cards[2].rank - 1 &&
-    cards[4].rank == cards[3].rank - 1
+    (0..2).any? do |index|
+      cards[index + 1].rank == cards[index].rank - 1 &&
+      cards[index + 2].rank == cards[index + 1].rank - 1 &&
+      cards[index + 3].rank == cards[index + 2].rank - 1 &&
+      cards[index + 4].rank == cards[index + 3].rank - 1
+    end
   end
 end
 
