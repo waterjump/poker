@@ -14,6 +14,14 @@ RSpec.describe Game do
   it 'deals five cards to community' do
     expect(game.deal.community.size).to eq(5)
   end
+
+  describe '#parse_pocket_cards' do
+    it 'returns an array of card object' do
+      expect(game.parse_pocket_cards('AS 3D')).to(
+        match([kind_of(Card), kind_of(Card)])
+      )
+    end
+  end
 end
 
 RSpec.describe Deck do
