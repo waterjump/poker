@@ -1,6 +1,12 @@
 Poker
 =====
-This app deals five cards psuedorandomly and evaluates if there's a valid poker hand.  Right now it's five card stud, but the plan is to make it so it can predict the winning chances of a Texas Holdem hand.  For example, pocket aces are more likely to win than a 2 and a 7 of different suits.  This app will provide statistics for that.
+This program takes user input for the player's pocket cards, and deals five community cards as in Texas Holdem, then evaluates what hand the player has.
+
+The input format is as follows:
+`<card rank><card suit> <card rank><card suit>`
+where card rank is number 2 - 10, J Q K or A and card suit is 'H' for hearts, 'S' for spades, 'D' for diamonds or 'C' for clubs.
+
+For example, if you have pocket cards ace of spades and 3 of diamonds, you would input `AS 3D`.
 
 ## Install
 (You need ruby and bundler)
@@ -12,4 +18,4 @@ Run the main file: `ruby poker.rb` _WARNING: You may shit yourself from having s
 
 ## Testing
 1. Follow the install instruction above.
-2. Run rspec: `bundle exec rspec`
+2. Run rspec: `TEST=true bundle exec rspec`

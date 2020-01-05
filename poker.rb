@@ -231,6 +231,64 @@ class Game
   def deal(hand = nil)
     @hand ||= hand || Hand.new(self)
   end
+
+  def parse_pocket_cards(cards_string)
+    cards = cards_string.split(' ')
+
+    cards.map do |card|
+      suit = case card[-1]
+             when 'S'
+               :spades
+             when 'C'
+               :clubs
+             when 'H'
+               :hearts
+             when 'D'
+               :diamonds
+             end
+      rank = case card[0]
+             when '2'
+               2
+             when '3'
+               3
+             when '4'
+               4
+             when '5'
+               5
+             when '6'
+               6
+             when '7'
+               7
+             when '8'
+               8
+             when '9'
+               9
+             when '1'
+               10
+             when 'J'
+               11
+             when 'Q'
+               12
+             when 'K'
+               13
+             when 'A'
+               14
+             end
+      @deck.cards.detect do |kard|
+        kard.rank == rank && kard.suit == suit
+      end
+    end
+  end
 end
 
-Game.new.deal.evaluate
+
+unless ENV['TEST']
+  game = Game.new
+  print "Enter your cards\n"
+  pocket_cards_string = gets
+
+  pocket_card_objects = game.parse_pocket_cards(pocket_cards_string)
+
+  hand = Hand.new(game, pocket_card_objects)
+  game.deal(hand).evaluate
+end
