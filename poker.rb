@@ -62,7 +62,7 @@ class Hand
   end
 
   def evaluate
-    puts "Community cards: ", "#{@community.map { |card| card.name }.join(', ')}"
+    puts "\nCommunity cards: ", "#{@community.map { |card| card.name }.join(', ')}"
     puts "Your cards: ", "#{@pocket.map { |card| card.name }.join(', ')}"
 
     # TODO: refactor these evaluations into a ranked result so they can be
@@ -284,10 +284,20 @@ end
 
 unless ENV['TEST']
   game = Game.new
-  print "Enter your cards\n"
-  pocket_cards_string = gets
+  def get_play_cards(game)
+    print "Enter your cards\n"
+    pocket_cards_string = gets
 
-  pocket_card_objects = game.parse_pocket_cards(pocket_cards_string)
+    game.parse_pocket_cards(pocket_cards_string)
+  rescue => e
+    print "Your cards must be in a format like this: \n"
+    print "<card rank><card suit> <card rank><card suit>\n\n"
+    print "For example: 3H AC\n\n"
+    print "Please try again.\n\n"
+    get_play_cards(game)
+  end
+
+  pocket_card_objects = get_play_cards(game)
 
   hand = Hand.new(game, pocket_card_objects)
   game.deal(hand).evaluate
