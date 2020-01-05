@@ -235,31 +235,45 @@ class Game
   def parse_pocket_cards(cards_string)
     cards = cards_string.split(' ')
 
+    raise 'Too few cards' if cards.size < 2
+    raise 'Too many cards' if cards.size > 2
+
+    all_cards_valid = cards.all? do |card|
+      card.length == 2 || (card.length == 3 && card[0..1] == '10')
+    end
+    raise 'Invalid input' unless all_cards_valid
+
     cards.map do |card|
       suit = case card[-1]
-             when 'S'
+             when 'S', 's'
                :spades
-             when 'C'
+             when 'C', 'c'
                :clubs
-             when 'H'
+             when 'H', 'h'
                :hearts
-             when 'D'
+             when 'D', 'd'
                :diamonds
+             else
+               raise 'Invalid suit'
              end
+
       rank = case card[0]
              when '2', '3', '4', '5', '6', '7', '8', '9'
                card[0].to_i
              when '1'
                10
-             when 'J'
+             when 'J', 'j'
                11
-             when 'Q'
+             when 'Q', 'q'
                12
-             when 'K'
+             when 'K', 'k'
                13
-             when 'A'
+             when 'A', 'a'
                14
+             else
+               raise 'Invalid rank'
              end
+
       @deck.cards.detect do |kard|
         kard.rank == rank && kard.suit == suit
       end

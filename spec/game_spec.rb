@@ -21,6 +21,86 @@ RSpec.describe Game do
         match([kind_of(Card), kind_of(Card)])
       )
     end
+
+    context 'when suit is lowercase' do
+      context 'spades or diamonds' do
+        it 'returns an array of card object' do
+          expect(game.parse_pocket_cards('As 3d')).to(
+            match([kind_of(Card), kind_of(Card)])
+          )
+        end
+      end
+
+      context 'clubs or hearts' do
+        it 'returns an array of card object' do
+          expect(game.parse_pocket_cards('Ac 3h')).to(
+            match([kind_of(Card), kind_of(Card)])
+          )
+        end
+      end
+    end
+
+    context 'when rank is lowercase' do
+      context 'ace or queen' do
+        it 'returns an array of card object' do
+          expect(game.parse_pocket_cards('as qd')).to(
+            match([kind_of(Card), kind_of(Card)])
+          )
+        end
+      end
+
+      context 'king or jack' do
+        it 'returns an array of card object' do
+          expect(game.parse_pocket_cards('ks jd')).to(
+            match([kind_of(Card), kind_of(Card)])
+          )
+        end
+      end
+    end
+
+    context 'when rank is invalid' do
+      it 'raises an error' do
+        expect { game.parse_pocket_cards('AS Zd') }.to(
+          raise_error('Invalid rank')
+        )
+      end
+    end
+
+    context 'when suit is invalid' do
+      it 'raises an error' do
+        expect { game.parse_pocket_cards('AS 3Z') }.to(
+          raise_error('Invalid suit')
+        )
+      end
+    end
+
+    context 'too few cards' do
+      it 'raises an error' do
+        expect { game.parse_pocket_cards('2d') }.to raise_error('Too few cards')
+      end
+    end
+
+    context 'too many cards' do
+      it 'raises an error' do
+        expect { game.parse_pocket_cards('2d qS 8c') }.to(
+          raise_error('Too many cards')
+        )
+      end
+    end
+
+    context 'blank input' do
+      it 'raises an error' do
+        expect { game.parse_pocket_cards('') }.to raise_error('Too few cards')
+      end
+    end
+
+    context 'when input is nonsense' do
+      it 'raises an error' do
+        expect { game.parse_pocket_cards('6nonsenseC 4h') }.to(
+          raise_error('Invalid input')
+        )
+      end
+    end
   end
 end
 
