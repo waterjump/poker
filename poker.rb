@@ -247,22 +247,8 @@ class Game
                :diamonds
              end
       rank = case card[0]
-             when '2'
-               2
-             when '3'
-               3
-             when '4'
-               4
-             when '5'
-               5
-             when '6'
-               6
-             when '7'
-               7
-             when '8'
-               8
-             when '9'
-               9
+             when '2', '3', '4', '5', '6', '7', '8', '9'
+               card[0].to_i
              when '1'
                10
              when 'J'
