@@ -102,6 +102,24 @@ RSpec.describe Game do
       end
     end
   end
+
+  describe '#reset' do
+    before { game.deal }
+
+    it 'clears community cards' do
+      expect { game.reset }.to(
+        change { game.hand.community.count }.from(5).to(0)
+      )
+    end
+
+    it 'clears pocket cards' do
+      expect { game.reset }.to change { game.hand.pocket.count }.from(2).to(0)
+    end
+
+    it 'repopulates deck' do
+      expect { game.reset }.to change { game.deck.cards.size }.to(52)
+    end
+  end
 end
 
 RSpec.describe Deck do
@@ -539,7 +557,7 @@ RSpec.describe Hand do
           ]
         )
 
-      expect { broken_hand.evaluate(true) }.not_to raise_error
+      expect { broken_hand.evaluate }.not_to raise_error
     end
   end
 end
