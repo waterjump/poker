@@ -162,7 +162,7 @@ RSpec.describe Hand do
           ]
         )
 
-      expect { royal_flush.evaluate }.to(
+      expect { royal_flush.evaluate(true) }.to(
         output(/You have a royal flush.*/).to_stdout
       )
     end
@@ -184,7 +184,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { not_royal_flush.evaluate }.not_to(
+        expect { not_royal_flush.evaluate(true) }.not_to(
           output(/You have a royal flush.*/).to_stdout
         )
       end
@@ -207,7 +207,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { five_high_flush.evaluate }.not_to(
+        expect { five_high_flush.evaluate(true) }.not_to(
           output(/You have a royal flush.*/).to_stdout
         )
       end
@@ -231,7 +231,7 @@ RSpec.describe Hand do
           ]
         )
 
-      expect { straight.evaluate }.to(
+      expect { straight.evaluate(true) }.to(
         output(/You have a straight flush.*/).to_stdout
       )
     end
@@ -255,7 +255,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { four_of_a_kind.evaluate }.to(
+        expect { four_of_a_kind.evaluate(true) }.to(
           output(/You have four 2s!.*/).to_stdout
         )
       end
@@ -263,7 +263,7 @@ RSpec.describe Hand do
 
     context 'when hand has no four of a kind' do
       it 'does not notify four of a kind has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have four of a kind.*/).to_stdout
         )
       end
@@ -288,7 +288,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { full_house.evaluate }.to(
+        expect { full_house.evaluate(true) }.to(
           output(/You have a full house!.*/).to_stdout
         )
       end
@@ -296,7 +296,7 @@ RSpec.describe Hand do
 
     context 'when hand has no four of a kind' do
       it 'does not notify four of a kind has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have a full house!.*/).to_stdout
         )
       end
@@ -321,7 +321,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { flush.evaluate }.to(
+        expect { flush.evaluate(true) }.to(
           output(/You have a flush.*/).to_stdout
         )
       end
@@ -329,7 +329,7 @@ RSpec.describe Hand do
 
     context 'when hand has no flush' do
       it 'does not notify flush result' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have a flush.*/).to_stdout
         )
       end
@@ -354,7 +354,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { straight.evaluate }.to(
+        expect { straight.evaluate(true) }.to(
           output(/You have a straight.*/).to_stdout
         )
       end
@@ -377,7 +377,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { straight.evaluate }.to(
+        expect { straight.evaluate(true) }.to(
           output(/You have a straight.*/).to_stdout
         )
       end
@@ -400,7 +400,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { straight.evaluate }.to(
+        expect { straight.evaluate(true) }.to(
           output(/You have a straight.*/).to_stdout
         )
       end
@@ -408,7 +408,7 @@ RSpec.describe Hand do
 
     context 'when hand has no straight' do
       it 'does not notify a straight result' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have a straight.*/).to_stdout
         )
       end
@@ -433,7 +433,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { three_of_a_kind.evaluate }.to(
+        expect { three_of_a_kind.evaluate(true) }.to(
           output(/You have three 2s!.*/).to_stdout
         )
       end
@@ -441,7 +441,7 @@ RSpec.describe Hand do
 
     context 'when hand has no three of a kind' do
       it 'does not notify three of a kind has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have three of a kind.*/).to_stdout
         )
       end
@@ -466,7 +466,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { two_pair.evaluate }.to(
+        expect { two_pair.evaluate(true) }.to(
           output(/You have two pair!.*/).to_stdout
         )
       end
@@ -474,7 +474,7 @@ RSpec.describe Hand do
 
     context 'when hand does not have two pair' do
       it 'does not notiify two pair has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have a pair of 2s!.*/).to_stdout
         )
       end
@@ -499,7 +499,7 @@ RSpec.describe Hand do
             ]
           )
 
-        expect { pair.evaluate }.to(
+        expect { pair.evaluate(true) }.to(
           output(/You have a pair of 2s!.*/).to_stdout
         )
       end
@@ -507,7 +507,7 @@ RSpec.describe Hand do
 
     context 'when hand has no pair' do
       it 'does not notiify pair has been evaluated' do
-        expect { high_card_hand.evaluate }.not_to(
+        expect { high_card_hand.evaluate(true) }.not_to(
           output(/You have a pair of 2s!.*/).to_stdout
         )
       end
@@ -516,7 +516,7 @@ RSpec.describe Hand do
 
   describe 'high card' do
     it 'notifies a high card result' do
-      expect { high_card_hand.evaluate }.to(
+      expect { high_card_hand.evaluate(true) }.to(
         output(/You have a high card.*/).to_stdout
       )
     end
@@ -539,7 +539,7 @@ RSpec.describe Hand do
           ]
         )
 
-      expect { broken_hand.evaluate }.not_to raise_error
+      expect { broken_hand.evaluate(true) }.not_to raise_error
     end
   end
 end

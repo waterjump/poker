@@ -61,58 +61,60 @@ class Hand
       end
   end
 
-  def evaluate
-    puts "\nCommunity cards: ", "#{@community.map { |card| card.name }.join(', ')}"
-    puts "Your cards: ", "#{@pocket.map { |card| card.name }.join(', ')}"
+  def evaluate(verbose = false)
+    if verbose
+      puts "\nCommunity cards: ", "#{@community.map { |card| card.name }.join(', ')}"
+      puts "Your cards: ", "#{@pocket.map { |card| card.name }.join(', ')}"
+    end
 
     # TODO: refactor these evaluations into a ranked result so they can be
     #   compared in the future
     if check_for_royal_flush
-      puts 'You have a royal flush'
+      puts 'You have a royal flush' if verbose
       return
     end
 
     if check_for_straight_flush
-      puts 'You have a straight flush'
+      puts 'You have a straight flush' if verbose
       return
     end
 
     if check_for_four_of_a_kind
-      puts "You have four #{check_for_four_of_a_kind}s!"
+      puts "You have four #{check_for_four_of_a_kind}s!" if verbose
       return
     end
 
     if check_for_full_house
-      puts "You have a full house!"
+      puts "You have a full house!" if verbose
       return
     end
 
     if check_for_flush
-      puts "You have a flush"
+      puts "You have a flush" if verbose
       return
     end
 
     if check_for_straight
-      puts 'You have a straight'
+      puts 'You have a straight' if verbose
       return
     end
 
     if check_for_three_of_a_kind
-      puts "You have three #{check_for_three_of_a_kind}s!"
+      puts "You have three #{check_for_three_of_a_kind}s!" if verbose
       return
     end
 
     if check_for_two_pair
-      puts "You have two pair!"
+      puts "You have two pair!" if verbose
       return
     end
 
     if check_for_pair
-      puts "You have a pair of #{check_for_pair}s!"
+      puts "You have a pair of #{check_for_pair}s!" if verbose
       return
     end
 
-    puts 'You have a high card'
+    puts 'You have a high card' if verbose
   end
 
   def check_for_royal_flush
@@ -299,5 +301,5 @@ unless ENV['TEST']
   pocket_card_objects = get_play_cards(game)
 
   hand = Hand.new(game, pocket_card_objects)
-  game.deal(hand).evaluate
+  game.deal(hand).evaluate(true)
 end
