@@ -179,7 +179,7 @@ class Hand
   end
 
   def check_straight_ranks(cards)
-    (0..2).any? do |index|
+    (0..cards.count - 5).any? do |index|
       cards[index + 1].rank == cards[index].rank - 1 &&
       cards[index + 2].rank == cards[index + 1].rank - 1 &&
       cards[index + 3].rank == cards[index + 2].rank - 1 &&
@@ -280,7 +280,6 @@ class Game
     end
   end
 end
-
 
 unless ENV['TEST']
   game = Game.new
