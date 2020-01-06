@@ -71,50 +71,51 @@ class Hand
     #   compared in the future
     if check_for_royal_flush
       puts 'You have a royal flush' if verbose
-      return
+      return :royal_flush
     end
 
     if check_for_straight_flush
       puts 'You have a straight flush' if verbose
-      return
+      return :straight_flush
     end
 
     if check_for_four_of_a_kind
       puts "You have four #{check_for_four_of_a_kind}s!" if verbose
-      return
+      return :four_of_a_kind
     end
 
     if check_for_full_house
       puts "You have a full house!" if verbose
-      return
+      return :full_house
     end
 
     if check_for_flush
       puts "You have a flush" if verbose
-      return
+      return :flush
     end
 
     if check_for_straight
       puts 'You have a straight' if verbose
-      return
+      return :straight
     end
 
     if check_for_three_of_a_kind
       puts "You have three #{check_for_three_of_a_kind}s!" if verbose
-      return
+      return :three_of_a_kind
     end
 
     if check_for_two_pair
       puts "You have two pair!" if verbose
-      return
+      return :two_pair
     end
 
     if check_for_pair
       puts "You have a pair of #{check_for_pair}s!" if verbose
-      return
+      return :pair
     end
 
     puts 'You have a high card' if verbose
+    :high_card
   end
 
   def check_for_royal_flush
@@ -231,7 +232,13 @@ class Game
   end
 
   def deal(hand = nil)
-    @hand ||= hand || Hand.new(self)
+    @hand = hand || Hand.new(self)
+  end
+
+  def reset
+    @deck.cards = @deck.cards + @hand.pocket + @hand.community
+    @hand.community = []
+    @hand.pocket = []
   end
 
   def parse_pocket_cards(cards_string)
@@ -300,6 +307,25 @@ unless ENV['TEST']
 
   pocket_card_objects = get_play_cards(game)
 
-  hand = Hand.new(game, pocket_card_objects)
-  game.deal(hand).evaluate(true)
+  results = {
+    royal_flush: 0,
+    straight_flush: 0,
+    four_of_a_kind: 0,
+    full_house: 0,
+    flush: 0,
+    straight: 0,
+    three_of_a_kind: 0,
+    two_pair: 0,
+    pair: 0,
+    high_card: 0
+  }
+
+  10000.times do |iteration|
+    hand = Hand.new(game, pocket_card_objects)
+    result = game.deal(hand).evaluate
+    results[result] = results[result] + 1
+    game.reset
+  end
+
+  puts results
 end
