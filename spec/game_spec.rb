@@ -521,4 +521,25 @@ RSpec.describe Hand do
       )
     end
   end
+
+  describe 'straight bug' do
+    it 'does not break anymore' do
+      broken_hand =
+        Hand.new(game,
+          [
+            Card.new(13, :spades, 'K'),
+            Card.new(10, :diamonds, '10')
+          ],
+          [
+            Card.new(4, :diamonds, '4'),
+            Card.new(6, :diamonds, '6'),
+            Card.new(2, :diamonds, '2'),
+            Card.new(3, :diamonds, '3'),
+            Card.new(4, :clubs, '4')
+          ]
+        )
+
+      expect { broken_hand.evaluate }.not_to raise_error
+    end
+  end
 end
